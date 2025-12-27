@@ -1,1 +1,313 @@
-#付款:情(XiaMoChen2003)/时卡2小时等收款/001
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户中心 - 充值</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .recharge-container {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #4a90e2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        .balance-info {
+            padding: 15px 20px;
+            background-color: #f0f8ff;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        .balance-info span {
+            color: #4a90e2;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .amount-title {
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .amount-btn {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .amount-btn:hover {
+            border-color: #4a90e2;
+            background-color: #f0f8ff;
+        }
+
+        .amount-btn.active {
+            background-color: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .custom-amount {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .custom-amount span {
+            padding: 12px 15px;
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .custom-amount input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            outline: none;
+            font-size: 1em;
+        }
+
+        .payment-title {
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .payment-methods {
+            display: grid;
+            gap: 15px;
+        }
+
+        .method-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .method-item:hover {
+            border-color: #4a90e2;
+            transform: translateY(-1px);
+        }
+
+        .method-item.active {
+            border-color: #4a90e2;
+            background-color: #f0f8ff;
+        }
+
+        .method-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 15px;
+        }
+
+        .method-name {
+            flex: 1;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .radio {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4a90e2;
+            transform: scale(0);
+            transition: transform 0.2s ease;
+        }
+
+        .method-item.active .radio::after {
+            transform: scale(1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #3a7bc8;
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="recharge-container">
+        <div class="header">
+            账户充值
+        </div>
+
+        <div class="balance-info">
+            当前余额：<span>¥ 125.50</span>
+        </div>
+
+        <div class="content">
+            <!-- 充值金额选择 -->
+            <div class="amount-title">选择充值金额</div>
+            <div class="amount-grid" id="amountGrid">
+                <button class="amount-btn" data-amount="10">¥ 10</button>
+                <button class="amount-btn" data-amount="30">¥ 30</button>
+                <button class="amount-btn" data-amount="50">¥ 50</button>
+                <button class="amount-btn" data-amount="100">¥ 100</button>
+                <button class="amount-btn" data-amount="200">¥ 200</button>
+                <button class="amount-btn" data-amount="500">¥ 500</button>
+            </div>
+
+            <!-- 自定义金额 -->
+            <div class="custom-amount">
+                <span>¥</span>
+                <input type="number" id="customAmount" placeholder="输入自定义金额" min="1" max="10000">
+            </div>
+
+            <!-- 支付方式 -->
+            <div class="payment-title">选择支付方式</div>
+            <div class="payment-methods">
+                <label class="method-item active">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/alipay/alipay-original.svg" alt="支付宝" class="method-icon">
+                    <span class="method-name">支付宝</span>
+                    <span class="radio"></span>
+                    <input type="radio" name="payment" value="alipay" checked style="display: none;">
+                </label>
+
+                <label class="method-item">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wechat/wechat-original.svg" alt="微信支付" class="method-icon">
+                    <span class="method-name">微信支付</span>
+                    <span class="radio"></span>
+                    <input type="radio" name="payment" value="wechat" style="display: none;">
+                </label>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button class="submit-btn" id="rechargeBtn">立即充值</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const amountButtons = document.querySelectorAll('.amount-btn');
+            const customAmountInput = document.getElementById('customAmount');
+            const paymentMethods = document.querySelectorAll('.method-item');
+            const rechargeBtn = document.getElementById('rechargeBtn');
+            let selectedAmount = 0;
+
+            // 金额按钮点击事件
+            amountButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除其他选中状态
+                    amountButtons.forEach(b => b.classList.remove('active'));
+                    // 添加当前选中状态
+                    this.classList.add('active');
+                    // 设置选中的金额
+                    selectedAmount = parseFloat(this.getAttribute('data-amount'));
+                    // 清空自定义输入框
+                    customAmountInput.value = '';
+                });
+            });
+
+            // 自定义金额输入事件
+            customAmountInput.addEventListener('input', function() {
+                // 当输入自定义金额时，取消预设金额的选中状态
+                amountButtons.forEach(b => b.classList.remove('active'));
+                selectedAmount = parseFloat(this.value) || 0;
+            });
+
+            // 支付方式点击事件
+            paymentMethods.forEach(item => {
+                item.addEventListener('click', function() {
+                    paymentMethods.forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // 充值按钮点击事件
+            rechargeBtn.addEventListener('click', function() {
+                if (selectedAmount <= 0) {
+                    alert('请选择或输入充值金额！');
+                    return;
+                }
+
+                const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+                alert(`充值请求已发送！\n金额：¥${selectedAmount.toFixed(2)}\n支付方式：${paymentMethod === 'alipay' ? '支付宝' : '微信支付'}`);
+                
+                // 这里可以跳转到支付页面或弹出支付二维码
+                // window.location.href = `/pay?amount=${selectedAmount}&method=${paymentMethod}`;
+            });
+        });
+    </script>
+
+</body>
+</html>
